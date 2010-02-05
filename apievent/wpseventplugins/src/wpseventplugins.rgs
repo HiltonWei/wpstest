@@ -1,0 +1,25 @@
+HKCR
+{
+	wpseventplugins.wpseventplugins.1 = s 'wpseventplugins Class'
+	{
+		CLSID = s '{7209C677-015F-4D67-9272-E5ED03ED8F81}'
+	}
+	wpseventplugins.wpseventplugins = s 'wpseventplugins Class'
+	{
+		CLSID = s '{7209C677-015F-4D67-9272-E5ED03ED8F81}'
+		CurVer = s 'wpseventplugins.wpseventplugins.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7209C677-015F-4D67-9272-E5ED03ED8F81} = s 'wpseventplugins Class'
+		{
+			ProgID = s 'wpseventplugins.wpseventplugins.1'
+			VersionIndependentProgID = s 'wpseventplugins.wpseventplugins'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+		}
+	}
+}

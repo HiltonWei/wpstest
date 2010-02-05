@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ksoplugin version="1">
+  <property
+  	id="{7209C677-015F-4D67-9272-E5ED03ED8F81}"
+  	version="1.0.0.0"
+  	type="comaddin"
+  	author="作者姓名"
+  	name="wpseventplugins"
+  	desc=""
+  	image=""
+  	homepage=""
+  	help=""
+  	loadimm="1"
+  	updateitv="7"
+    />
+</ksoplugin>
