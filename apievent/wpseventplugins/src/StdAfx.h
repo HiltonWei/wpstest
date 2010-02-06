@@ -49,7 +49,7 @@ using namespace KSO;
 #include <atlimpl.cpp>
 #include "resource.h"
 
-#include "app_event.h"
+
 
 //#include "resource.h"
 

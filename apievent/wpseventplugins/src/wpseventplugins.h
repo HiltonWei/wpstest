@@ -1,4 +1,5 @@
 #pragma once
+#include "app_event.h"
 class __declspec(uuid("{7209C677-015F-4D67-9272-E5ED03ED8F81}")) Cwpseventplugins;
 
 using namespace AddInDesignerObjects;
