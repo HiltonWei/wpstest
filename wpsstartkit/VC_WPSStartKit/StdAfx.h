@@ -24,18 +24,14 @@
 
 //ATL support
 #include <atlbase.h>
-#include <atlapp.h>
+//#include <atlapp.h>
 #include <atlcom.h>
 #include <comdef.h>
-#include <atlmisc.h>
+//#include <atlmisc.h>
 
 //ATL Windowing support
 #include <atlwin.h>
 
-#import "D:\Program Files\Kingsoft\WPS Office Personal\office6\ksaddndr.dll" named_guids, raw_interfaces_only
-#import "D:\Program Files\Kingsoft\WPS Office Personal\office6\kso10.dll" named_guids, rename_namespace("KSO")
-#import "D:\Program Files\Kingsoft\WPS Office Personal\office6\wpscore.dll" rename_namespace("WPS")
-using namespace KSO;
 // Local Header Files
 
 // TODO: reference additional headers your program requires here
