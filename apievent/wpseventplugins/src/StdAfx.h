@@ -30,6 +30,7 @@
 extern CComModule _Module; //Do not change the name of _Module
 using namespace std;
 
+//开发者WPS的安装路径需要修改
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 #import "D:\Program Files\Kingsoft\WPS Office Personal\office6\ksaddndr.dll" named_guids, raw_interfaces_only
 #import "D:\Program Files\Kingsoft\WPS Office Personal\office6\kso10.dll" named_guids, rename_namespace("KSO")
