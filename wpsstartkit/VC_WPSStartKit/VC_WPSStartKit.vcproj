@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="VC_WPSStartKit"
 	ProjectGUID="{D3D40C98-1D3C-4B65-817E-33E7D089B0CC}"
+	RootNamespace="VC_WPSStartKit"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -299,10 +300,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
-			<File
-				RelativePath=".\app_event.h"
-				>
-			</File>
 			<File
 				RelativePath="ControlWPS.h"
 				>

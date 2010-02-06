@@ -4,9 +4,7 @@
 
 #if !defined(_CONTROLWPS_H_)
 #define _CONTROLWPS_H_
-
 #include <atlbase.h>
-#include "app_event.h"
 
 class CControlWPS  
 {
@@ -18,8 +16,6 @@ public:
 	void CloseWPS();
 private:
 	IDispatch* m_pIDisp;
-	WPS::_ApplicationPtr m_spApp;///wps的应用程序
-	KAppEvent m_AppEvent;///应用程序的响应事件
 private:
 	HRESULT GetProperty(IDispatch *pDisp, LPCOLESTR lpsz, VARIANT *pVar);
 	HRESULT PutProperty(IDispatch *pDisp, LPCOLESTR lpsz, VARIANT *pVar);
