@@ -48,13 +48,13 @@ public:
 	void __stdcall DocumentOpen (IDispatch *pDispDoc)
 	{	
 		//FindWindow函数有两个参数，第一个是要找的窗口的类，第二个是要找的窗口的标题。在搜索的时候不一定两者都知道，但至少要知道其中的一个 
-		MessageBox(GetActiveWindow(), L"你打开了一个文档1", L"提示", MB_TOPMOST);
+		MessageBox(GetActiveWindow(), L"你打开了一个文档,被Demo的插件检测到", L"提示", MB_TOPMOST);
 		HWND fHandle = FindWindow(L"VC_WPSSTARTKIT", NULL);  
 		PostMessage(fHandle, WM_MyMessageOpen, 100, 200);
 	}
 	void __stdcall NewDocument (IDispatch *pDispDoc )
 	{
-		MessageBox(GetActiveWindow(), L"你新建一个文档", L"提示", MB_TOPMOST);
+		MessageBox(GetActiveWindow(), L"你新建一个文档,被Demo的插件检测到", L"提示", MB_TOPMOST);
 		HWND fHandle = FindWindow(L"VC_WPSSTARTKIT", NULL);  
 		PostMessage(fHandle, WM_MyMessageNew, 100, 200);
 	}
