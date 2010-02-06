@@ -2,7 +2,10 @@
 
 #ifndef app_event_h__
 #define app_event_h__
-
+//Windows提供的自定义消息最小值 
+#define WM_USER 0x0400
+//定义一个自定义消息，因为需要新的Windows特性也使用了WM_User,微软建议要比这个值大100以上 
+#define WM_MyMessage (WM_USER+101)
 // void __stdcall DocumentOpen(IDispatch *pDispDoc)
 __declspec(selectany) _ATL_FUNC_INFO OnDocumentOpenInfo = {CC_STDCALL, VT_EMPTY, 1, 
 {VT_DISPATCH}};
@@ -16,6 +19,7 @@ class KAppEvent: public IDispEventSimpleImpl<1, KAppEvent, &__uuidof(WPS::Applic
 {
 private:
 	WPS::_ApplicationPtr m_spApp;
+
 public:
 	BEGIN_SINK_MAP(KAppEvent)
 		SINK_ENTRY_INFO(1,  __uuidof(WPS::ApplicationEvents), 4, DocumentOpen, &OnDocumentOpenInfo)
@@ -44,8 +48,10 @@ public:
 		DispEventUnadvise(pApp);
 	}
 	void __stdcall DocumentOpen (IDispatch *pDispDoc)
-	{		
-		MessageBox(GetActiveWindow(), L"你打开了一个文档", L"提示", MB_TOPMOST);
+	{	
+		HWND fHandle = FindWindow(L"VC_WPSSTARTKIT", NULL);  
+		MessageBox(GetActiveWindow(), L"你打开了一个文档1", L"提示", MB_TOPMOST);
+		SendMessage(fHandle, WM_MyMessage, 100, 200);
 	}
 	void __stdcall NewDocument (IDispatch *pDispDoc )
 	{
