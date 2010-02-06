@@ -7,6 +7,10 @@
 
 #define MAX_LOADSTRING 100
 
+//定义一个自定义消息，因为需要新的Windows特性也使用了WM_User,微软建议要比这个值大100以上 
+#define WM_MyMessageOpen (WM_USER+101)
+#define WM_MyMessageNew (WM_USER+102)
+
 // Global Variables:
 HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];								// The title bar text
@@ -174,6 +178,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
+		case WM_MyMessageOpen:
+			MessageBox(GetActiveWindow(), "WPS打开了一个文档", "提示", MB_TOPMOST);
+		case WM_MyMessageNew:
+			MessageBox(GetActiveWindow(), "WPS新建一个文档", "提示", MB_TOPMOST);
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
    }

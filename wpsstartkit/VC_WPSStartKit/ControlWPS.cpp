@@ -42,13 +42,7 @@ void CControlWPS::OpenWPS()
 	VARIANT var = {0};
 	var.vt = VT_BOOL;
 	var.boolVal = VARIANT_TRUE;
-	PutProperty(m_pIDisp, L"Visible", &var);
-/**/
-	//装载事件
-	m_spApp = m_pIDisp;///主程序
-	m_AppEvent.init(m_spApp);
-	m_AppEvent.EventAdvise(m_spApp);
-	
+	PutProperty(m_pIDisp, L"Visible", &var);	
 	
 
 	// 获取Documents集合
@@ -59,7 +53,7 @@ void CControlWPS::OpenWPS()
 	VARIANT varDocument = {0};
 	Invoke0(varDocuments.pdispVal, L"Add", &varDocument);
 
-	
+/*	
 	// 获取Selection对象
 	VARIANT varSelection = {0};
 	GetProperty(m_pIDisp, L"Selection", &varSelection);
@@ -106,7 +100,7 @@ void CControlWPS::OpenWPS()
 	varParams[7].bstrVal = ::SysAllocString(A2OLE("http://img.kingsoft.com/publish/kingsoft/images/gb/sy/logo.gif"));
 	
 	// 插入图片
-	InvokeN(varShapes.pdispVal, L"AddPicture", varParams, 8, &var);
+	InvokeN(varShapes.pdispVal, L"AddPicture", varParams, 8, &var);*/
 }
 
 // 关闭WPS
@@ -119,9 +113,6 @@ void CControlWPS::CloseWPS()
 	varParams[1].boolVal = VARIANT_FALSE;
 	varParams[2].vt = VT_BOOL;
 	varParams[2].boolVal = VARIANT_FALSE;
-
-	// 首先调用WPS.Application的Quit方法，并且不保存修改
-	m_AppEvent.EventUnadvise(m_spApp);
 	InvokeN(m_pIDisp, L"Quit", varParams, 3, NULL);
 	if(m_pIDisp != NULL)
 	{
