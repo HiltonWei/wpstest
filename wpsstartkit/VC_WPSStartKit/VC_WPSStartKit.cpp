@@ -180,8 +180,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case WM_MyMessageOpen:
 			MessageBox(GetActiveWindow(), "WPS打开了一个文档,被Demo检测到", "提示", MB_TOPMOST);
+			break;
 		case WM_MyMessageNew:
 			MessageBox(GetActiveWindow(), "WPS新建一个文档,被Demo检测到", "提示", MB_TOPMOST);
+			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
    }
