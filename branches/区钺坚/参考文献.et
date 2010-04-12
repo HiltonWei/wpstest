@@ -1,0 +1,8 @@
+论文题目	作者	发表	相关内容
+Top-k Query Processing in Uncertain Databases	"Soliman M A , 
+Ilyas I F ,
+Chang K C."	Proceedings of t he 23rd IEEE International Conference on Data Engineering. Istanbul , 2007 :8962905	提出了基于搜索空间的方法来处理U-Top k 查询与U-kRanks 查询. 各元组首先按照ranking 函数从大到小进行排序,然后不断地构造搜索空间,缩小空间的范围,最终获得查询结果. 
+Efficiently answering probabilistic threshold top-k queries on uncertain data	Hua M , Pei J , Zhang W J , Lin X M.	Proceedings of the 24th IEEE International Conference on Data Engineering. 2008 : 140321405	针对PT2k 查询提出了构造dominant 集合的方法
+Ranking queries on uncertain data : A probabilistic threshold approach	Hua Ming , Pei Jian , Zhang Wenjie , Lin Xuemin.	Proceedings of the 2008 ACM SIGMOD International Conference on Management of Data. Vancouver , 2008 :6732686	针对PT-k 查询提出了构造dominant 集合的方法
+Sliding window top-k queries on uncertain Streams.	Jin CheQing , Yi Ke , Chen Lei , Yu Xu , Lin XueMin.	Proceedings of the VLDB Endowment , 2008 , 1 (1) : 3012312	提出了面向数据流应用的Top2k 查询处理算法,不仅能够解决4种topk查询,而且是一次遍历算法,能够处理数据流应用.
+Dynamic struct ures for topk queries on uncertain data	Chen J , Yi K.	Proceedings of t he 18th International Symposium on Algorit hms and Computation. Sendai , 2007 : 4272438	针对U-Top k 查询提出了一种动态维护的结构,支持元组的插入与删除
