@@ -2,7 +2,8 @@
 #include <time.h>
 #include <math.h>
 #include <cstdlib>
-
+#include <iostream> 
+using namespace std;
 kundata::kundata(void)
 {
 	initdata();
@@ -63,14 +64,17 @@ double* kundata::readprobabilitylist()
 	}
 	return dprobabilitylist;
 }
-
-
-std::ostream & operator <<(std::ostream& out,const kundata& item)
-{
-	using std::endl; 
-	for (int i = 0;i < 10; i++)
+std::ostream & operator <<(std::ostream &out,kundata &item)
+{ 
+	for (int i = 0;i < MAXN; i++)
 	{
-		out << item.kdata[i].readdata() << "  " << item.kdata[i].readprobability()<< endl;
+		out << item.kdata[i];
 	}
 	return out;
+}
+
+std::ostream & operator <<(std::ostream &os,kdataitem &item )
+{
+	os << item.m_data  <<" : " << item.m_probability <<endl; 
+	return os;
 }

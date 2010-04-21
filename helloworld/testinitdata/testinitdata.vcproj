@@ -201,10 +201,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\kundatabase.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
