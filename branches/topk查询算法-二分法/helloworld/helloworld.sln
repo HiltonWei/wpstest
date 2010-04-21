@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helloworld", "helloworld\helloworld.vcproj", "{132C226C-5C51-4B94-B218-F86E66EB55B9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testinitdata", "testinitdata\testinitdata.vcproj", "{CB98209A-7161-456C-8BE6-52427FCAB632}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcproj", "{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -17,6 +21,14 @@ Global
 		{132C226C-5C51-4B94-B218-F86E66EB55B9}.Debug|Win32.Build.0 = Debug|Win32
 		{132C226C-5C51-4B94-B218-F86E66EB55B9}.Release|Win32.ActiveCfg = Release|Win32
 		{132C226C-5C51-4B94-B218-F86E66EB55B9}.Release|Win32.Build.0 = Release|Win32
+		{CB98209A-7161-456C-8BE6-52427FCAB632}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CB98209A-7161-456C-8BE6-52427FCAB632}.Debug|Win32.Build.0 = Debug|Win32
+		{CB98209A-7161-456C-8BE6-52427FCAB632}.Release|Win32.ActiveCfg = Release|Win32
+		{CB98209A-7161-456C-8BE6-52427FCAB632}.Release|Win32.Build.0 = Release|Win32
+		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Debug|Win32.Build.0 = Debug|Win32
+		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Release|Win32.ActiveCfg = Release|Win32
+		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
