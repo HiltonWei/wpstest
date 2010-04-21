@@ -16,7 +16,16 @@ public:
 	time(); 
 	friend std::ostream & operator <<(std::ostream &os,time &t); 
 }; 
-
+class record
+{
+public:
+	//friend time;
+	record(){m_a = new time(3,45,48);}
+	~record(){}	
+	friend std::ostream & operator <<(std::ostream &os,record &t); 
+private:
+	time *m_a;
+};
 
 
 time::time(int a,int b,int c) 
@@ -36,16 +45,7 @@ std::ostream & operator <<(std::ostream &os,time &t)
 	os <<t.h <<":" <<t.m <<":" <<t.s <<endl; 
 	return os;
 } 
-class record
-{
-public:
-	friend time;
-	record(){m_a = new time(3,45,48);}
-	~record(){}	
-	friend std::ostream & operator <<(std::ostream &os,record &t); 
-private:
-	time *m_a;
-};
+
 std::ostream & operator<<( std::ostream &os,record &t )
 {
 	os << *(t.m_a);

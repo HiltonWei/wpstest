@@ -1,11 +1,13 @@
 #pragma once
-#include "kundatabase.h"
 #include "hcode.h"
+#include <iostream> 
+using namespace std;
 class kdataitem
 {
 public:
 	kdataitem(){}
 	~kdataitem(){}
+	friend std::ostream & operator <<(std::ostream &,kdataitem &); 
 	//friend std::ostream & operator <<(std::ostream&,const kdataitem&);
 	//void setdata(int &ndata)const{m_data = ndata;};
 	//void setprobability(double &probability)const{m_probability = probability;};
@@ -38,7 +40,7 @@ public:
 	int initdata();
 	int* readdatalist();
 	double* readprobabilitylist();
-	friend std::ostream & operator <<(std::ostream&,const kundata&);
+	friend std::ostream & operator <<(std::ostream&,kundata&);
 	kdataitem &operator[] (const size_t);
 	const kdataitem &operator[] (const size_t)const;
 	~kundata(void);
