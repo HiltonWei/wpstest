@@ -74,11 +74,11 @@ int main() {
 	cout << "Result:" << MAXN << endl;
 	for(int i=0; i<10; ++i) {
 		cout << a[i] << "    " << b[i] <<endl;
-
 	}
-	cout << *pdatalist;
+	//cout << *pdatalist;
 	cout << "Swaps:" << count_sw << endl;
 	cout << "Campare:" << count_cmp << endl;
+	kruleitem ritem;
 	int n;
 	cin>>n;
 	return 0;
