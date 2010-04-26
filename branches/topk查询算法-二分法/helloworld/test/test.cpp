@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-
 #include <iostream> 
 using namespace std;
 class time 
@@ -52,12 +51,37 @@ std::ostream & operator<<( std::ostream &os,record &t )
 	return os;
 }
 
+void dispaly(double* list)
+{
+	for (int i=0; i <10; i++)
+	{
+		cout<<list[i]<<"   ";
+	}
+	cout<<endl;
+}
 int main() 
 {
-	using std::cout; 
-	using std::endl; 
-	record a; 
-	cout <<a; 
+	int m_nrulecount = 10;
+	double m_pruleprolist[10];
+	for (int i = 9; i >= 0; i--)
+	{
+		m_pruleprolist[i] =  10-i;
+	}
+	for(int i=0; i < m_nrulecount; i++)
+	{
+		dispaly(m_pruleprolist);
+		for(int j = m_nrulecount-1; j >= i; j--)
+		{
+			if(m_pruleprolist[j] < m_pruleprolist[j-1])
+			{
+				double temp = m_pruleprolist[j];
+				m_pruleprolist[j] = m_pruleprolist[j-1];
+				m_pruleprolist[j-1] = temp;
+			}			
+		}
+		
+	}
+	system("PAUSE");
 	return 0;
 } 
 
