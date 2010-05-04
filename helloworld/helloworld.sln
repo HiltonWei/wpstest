@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testinitdata", "testinitdat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcproj", "{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "topkquery", "topkquery\topkquery.vcproj", "{C508392F-B3F7-4C10-9276-EA141EB8CBA9}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -29,6 +31,10 @@ Global
 		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Debug|Win32.Build.0 = Debug|Win32
 		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Release|Win32.ActiveCfg = Release|Win32
 		{D7C91E34-AB3A-417B-BE5A-D20AF017D7BD}.Release|Win32.Build.0 = Release|Win32
+		{C508392F-B3F7-4C10-9276-EA141EB8CBA9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C508392F-B3F7-4C10-9276-EA141EB8CBA9}.Debug|Win32.Build.0 = Debug|Win32
+		{C508392F-B3F7-4C10-9276-EA141EB8CBA9}.Release|Win32.ActiveCfg = Release|Win32
+		{C508392F-B3F7-4C10-9276-EA141EB8CBA9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
