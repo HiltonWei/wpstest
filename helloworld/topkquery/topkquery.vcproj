@@ -171,6 +171,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ktopquery.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\kundata.cpp"
 				>
 			</File>
@@ -190,6 +194,10 @@
 			>
 			<File
 				RelativePath=".\hcode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ktopquery.h"
 				>
 			</File>
 			<File
