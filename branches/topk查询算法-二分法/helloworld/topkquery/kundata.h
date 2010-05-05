@@ -65,14 +65,15 @@ public:
 	}
 	virtual int initprobability() = ZERO;
 	virtual int initdata() = ZERO;
+	kdataitem* readitemlist(){return m_pkdatalist;}
 	int readsize(){return m_nsize;}
 	~kundatabase(void){}
-	kdataitem* m_pkdata;	
+	kdataitem* m_pkdatalist;	
 private:
 	int m_nsize;
 	void init()
 	{
-		m_pkdata = new kdataitem[m_nsize];
+		m_pkdatalist = new kdataitem[m_nsize];
 	}
 };
 
