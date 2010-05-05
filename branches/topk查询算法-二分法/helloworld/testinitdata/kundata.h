@@ -38,12 +38,12 @@ public:
 	virtual int initdata() = ZERO;
 	int readsize(){return m_nsize;}
 	~kundatabase(void){}
-	kdataitem* m_pkdata;	
+	kdataitem* m_pkdatalist;	
 private:
 	int m_nsize;
 	void init()
 	{
-		m_pkdata = new kdataitem[m_nsize];
+		m_pkdatalist = new kdataitem[m_nsize];
 	}
 };
 
