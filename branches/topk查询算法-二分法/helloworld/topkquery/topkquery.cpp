@@ -12,10 +12,12 @@ double* b;
 int last;
 int count_sw, count_cmp;
 kundata * pdatalist;
+koption * pkoption;
 
 //初始化测试数据
 void init () {
-	pdatalist = new kundata();
+	pdatalist = kundata::GetSingleton();
+	kundata::GetSingleton();
 	a = pdatalist->readdatalist();
 	b = pdatalist->readprobabilitylist();
 }
@@ -72,6 +74,9 @@ int koption::s_nLimit = LIMIT;
 int koption::s_nMultirule = MULTIRULE;
 int koption::s_nRulemax = RULEMAX;
 int koption::s_nRulemin = RULEMIN;
+kundata* kundata::instance = NULL;
+koption* koption::instance = NULL;
+
 int main() {
 	init();
 	count_sw = 0;
@@ -86,8 +91,8 @@ int main() {
 	cout << "Campare:" << count_cmp << endl;
 	kruleitem ritem;
 	int n;
-	koption instance;
-	cout << instance;
+	pkoption = koption::GetSingleton();
+	cout << *pkoption;
 	cin >> n;
 	return 0;
 }
