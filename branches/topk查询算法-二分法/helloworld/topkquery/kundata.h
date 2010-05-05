@@ -5,12 +5,34 @@ using namespace std;
 class koption
 {
 public:
+	static koption *GetSingleton()
+	{
+		static bool inited = false;
+		if (!inited)
+		{
+			instance = new koption();
+			inited = true;
+		}
+		return instance;        
+	}
+	static void Release()
+	{
+		if (NULL != instance)
+		{
+			delete instance;
+			instance = NULL;
+		}
+	}
 	static int s_nMultirule;//rule个数
 	static int s_nRulemin;//一个rule最小个数
 	static int s_nRulemax;//一个rule最大个数
 	static int s_nMaxnum;//元组的个数
 	static int s_nLimit;//保留参数
 	friend std::ostream & operator <<(std::ostream&,koption&);
+private:
+	static koption *instance;
+	koption(void){}
+	~koption(void){}
 };
 
 class kdataitem
@@ -57,8 +79,9 @@ public:
 	kruleitem(void);
 	~kruleitem(void){};
 	int initruleitem();
-	int makerule(kdataitem*,int);
+	int makerule(std::ostream &,kdataitem*);
 	void display(double*);
+	friend std::ostream & operator <<(std::ostream &,kruleitem &); 
 protected:
 	int m_nrulesizemin;
 	int m_nrulesizemax;
@@ -71,7 +94,25 @@ class kundata :
 	virtual public kundatabase
 {
 public:
-	kundata(void);
+	static kundata *GetSingleton()
+	{
+		static bool inited = false;
+		if (!inited)
+		{
+			instance = new kundata();
+			inited = true;
+		}
+		return instance;        
+	}
+	static void Release()
+	{
+		if (NULL != instance)
+		{
+			delete instance;
+			instance = NULL;
+		}
+	}
+	
 	int initprobability();
 	int initdata();
 	int initrule();
@@ -80,8 +121,11 @@ public:
 	friend std::ostream & operator <<(std::ostream&,kundata&);
 	kdataitem &operator[] (const size_t);
 	const kdataitem &operator[] (const size_t)const;
-	~kundata(void);
+	
 private:
+	static kundata *instance;
+	kundata(void);
+	~kundata(void);
 	kruleitem* m_pkritem;
 };
 

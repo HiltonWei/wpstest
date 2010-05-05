@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cstdlib>
 #include <iostream> 
+#include <fstream>
 #include <Windows.h>
 using namespace std;
 kundata::kundata(void)
@@ -28,6 +29,7 @@ int kundata::initprobability()
 
 int kundata::initdata()
 {
+	const char filename[] = MYRULEFILE;
 	//srand()函数产生一个以当前时间开始的随机种子.应该放在for等循环语句前面 不然要很长时间等待
 	srand((unsigned)time(NULL) + rand());
 	//参与查询的数据
@@ -69,11 +71,21 @@ double* kundata::readprobabilitylist()
 
 int kundata::initrule()
 {
+	const char filename[] = MYRULEFILE;
+	ofstream o_file;
+	o_file.open(filename);
+	for (int i = ZERO;i < this->readsize(); i++)
+	{
+		o_file << this->m_pkdata[i];
+	}
+	
 	m_pkritem = new kruleitem[koption::s_nMultirule];
 	for (int i = ZERO; i < koption::s_nMultirule; i++)
 	{
-		m_pkritem[i].makerule(m_pkdata, readsize());
+		m_pkritem[i].makerule(o_file,this->m_pkdata);
 	}
+	o_file << *(koption::GetSingleton());
+	o_file.close();
 	return 1;
 }
 std::ostream & operator <<(std::ostream &out,kundata &item)
@@ -99,7 +111,15 @@ std::ostream & operator <<(std::ostream &os,koption &item )
 		<< koption::s_nRulemax << endl; 
 	return os;
 }
-
+std::ostream & operator <<(std::ostream & os,kruleitem & item)
+{
+	for (int i = 0; i < item.m_nrulecount; i++)
+	{
+		os<< item.m_pnordlist[i] <<" : " << item.m_pdruleprolist[i] << endl;
+	}
+	os << endl;
+	return os;
+}
 kruleitem::kruleitem(void)
 {//初始化一个rule
 	m_nrulesizemin = koption::s_nRulemin;
@@ -155,12 +175,11 @@ int kruleitem::initruleitem()
 	return 1;
 }
 
-int kruleitem::makerule(kdataitem* pklist, int nsize)
+int kruleitem::makerule(std::ostream &out,kdataitem* pklist)
 {
-	int nlistsize = nsize;
-	int nord;	
-	srand((unsigned)time(NULL) + rand());
-	cout<<"one rule begin"<<endl;
+	int nlistsize = koption::s_nMaxnum;
+	int nord;
+	out << "one rule begin\n";
 	for (int i = 0; i < m_nrulecount; i++)
 	{
 		do 
@@ -169,9 +188,9 @@ int kruleitem::makerule(kdataitem* pklist, int nsize)
 		} while (pklist[m_pnordlist[i]].readmark());	
 		pklist[m_pnordlist[i]].setmark();
 		pklist[m_pnordlist[i]] = m_pdruleprolist[i];
-		cout << "  " << pklist[m_pnordlist[i]];
+		out << "  " << pklist[m_pnordlist[i]];
 	}
-	cout<<"rule end"<<endl;
+	out << "rule end\n";
 	return 1;
 }
 
