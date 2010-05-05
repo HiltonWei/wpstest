@@ -3,4 +3,5 @@
 #define ZERO 0
 #define RULEMIN 2
 #define RULEMAX 10
-#define MULTIRULE 10
+#define MULTIRULE 800
+#define MYRULEFILE "myrule.txt"
