@@ -74,17 +74,13 @@ int kundata::initrule()
 	const char filename[] = MYRULEFILE;
 	ofstream o_file;
 	o_file.open(filename);
-	for (int i = ZERO;i < this->readsize(); i++)
-	{
-		o_file << this->m_pkdata[i];
-	}
-	
+	o_file << *(koption::GetSingleton());	
 	m_pkritem = new kruleitem[koption::s_nMultirule];
 	for (int i = ZERO; i < koption::s_nMultirule; i++)
 	{
-		m_pkritem[i].makerule(o_file,this->m_pkdata);
-	}
-	o_file << *(koption::GetSingleton());
+		m_pkritem[i].makerule(o_file,this->m_pkdata,i);
+	}	
+	o_file << *this;
 	o_file.close();
 	return 1;
 }
@@ -99,7 +95,10 @@ std::ostream & operator <<(std::ostream &out,kundata &item)
 
 std::ostream & operator <<(std::ostream &os,kdataitem &item )
 {
-	os << item.m_data  <<" : " << item.m_probability <<endl; 
+	os << item.m_data  <<" : " 
+		<< item.m_probability <<" : " 
+		<< item.m_ruleserial
+		<<endl; 
 	return os;
 }
 
@@ -175,11 +174,11 @@ int kruleitem::initruleitem()
 	return 1;
 }
 
-int kruleitem::makerule(std::ostream &out,kdataitem* pklist)
+int kruleitem::makerule(std::ostream &out,kdataitem* pklist,int nserial)
 {
 	int nlistsize = koption::s_nMaxnum;
 	int nord;
-	out << "one rule begin\n";
+	out << nserial<<" rule begin\n";
 	for (int i = 0; i < m_nrulecount; i++)
 	{
 		do 
@@ -188,7 +187,8 @@ int kruleitem::makerule(std::ostream &out,kdataitem* pklist)
 		} while (pklist[m_pnordlist[i]].readmark());	
 		pklist[m_pnordlist[i]].setmark();
 		pklist[m_pnordlist[i]] = m_pdruleprolist[i];
-		out << "  " << pklist[m_pnordlist[i]];
+		(pklist[m_pnordlist[i]]).setruleserial(nserial);
+		out << "  " << pklist[m_pnordlist[i]];		
 	}
 	out << "rule end\n";
 	return 1;
