@@ -38,19 +38,22 @@ private:
 class kdataitem
 {
 public:
-	kdataitem(){m_mark = false;}
+	kdataitem(){m_mark = false;m_ruleserial = -1;}
 	~kdataitem(){}
 	friend std::ostream & operator <<(std::ostream &,kdataitem &); 
 	double readprobability(){return m_probability;}
 	int readdata(){return m_data;}
 	void setmark(){m_mark = true;}
 	bool readmark(){return m_mark;}
+	int readruleserial(){return m_ruleserial;}
+	void setruleserial(int number){m_ruleserial = number;}
 	kdataitem& operator=(const double &dprobability){m_probability = dprobability;return *this;}
 	kdataitem& operator=(const int &ndata){m_data = ndata;return *this;}
 private:
 	double m_probability;
 	int m_data;
 	bool m_mark;
+	int m_ruleserial;
 };
 class kundatabase
 {
@@ -79,7 +82,7 @@ public:
 	kruleitem(void);
 	~kruleitem(void){};
 	int initruleitem();
-	int makerule(std::ostream &,kdataitem*);
+	int makerule(std::ostream &,kdataitem*,int);
 	void display(double*);
 	friend std::ostream & operator <<(std::ostream &,kruleitem &); 
 protected:
