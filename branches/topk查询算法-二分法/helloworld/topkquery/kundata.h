@@ -28,12 +28,14 @@ public:
 	static int s_nRulemax;//一个rule最大个数
 	static int s_nMaxnum;//元组的个数
 	static int s_nLimit;//保留参数
+	static int s_nK;
 	friend std::ostream & operator <<(std::ostream&,koption&);
 private:
 	static koption *instance;
 	koption(void){}
 	~koption(void){}
 };
+
 
 class kdataitem
 {
@@ -115,8 +117,7 @@ public:
 			delete instance;
 			instance = NULL;
 		}
-	}
-	
+	}	
 	int initprobability();
 	int initdata();
 	int initrule();

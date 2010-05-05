@@ -6,6 +6,14 @@
 #include <fstream>
 #include <Windows.h>
 using namespace std;
+int koption::s_nMaxnum = MAXN;
+int koption::s_nLimit = LIMIT;
+int koption::s_nMultirule = MULTIRULE;
+int koption::s_nRulemax = RULEMAX;
+int koption::s_nRulemin = RULEMIN;
+int koption::s_nK = KVALUE;
+kundata* kundata::instance = NULL;
+koption* koption::instance = NULL;
 kundata::kundata(void)
 {
 	initdata();
