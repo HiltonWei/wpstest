@@ -21,7 +21,7 @@ int kundata::initprobability()
 	srand((unsigned)time(NULL) + rand());
 	//参与查询的数据
 	for(int i=ZERO; i < this->readsize(); ++i) {
-		m_pkdata[i] =  rand() % 1000 / 1000.0;
+		m_pkdatalist[i] =  rand() % 1000 / 1000.0;
 	}
 	return 1;
 }
@@ -32,19 +32,19 @@ int kundata::initdata()
 	srand((unsigned)time(NULL) + rand());
 	//参与查询的数据
 	for(int i=0; i < this->readsize(); ++i) {
-		m_pkdata[i] =  rand() % this->readsize();
+		m_pkdatalist[i] =  rand() % this->readsize();
 	}
 	return 1;
 }
 
 kdataitem & kundata::operator[]( const size_t index)
 {
-	return m_pkdata[index];
+	return m_pkdatalist[index];
 }
 
 const kdataitem & kundata::operator[]( const size_t index) const
 {
-	return m_pkdata[index];
+	return m_pkdatalist[index];
 }
 
 int* kundata::readdatalist()
@@ -52,7 +52,7 @@ int* kundata::readdatalist()
 	int* pndatalist = new int[this->readsize()];
 	for (int i = ZERO; i < this->readsize(); i++)
 	{
-		pndatalist[i] = m_pkdata[i].readdata();
+		pndatalist[i] = m_pkdatalist[i].readdata();
 	}
 	return pndatalist;
 }
@@ -62,7 +62,7 @@ double* kundata::readprobabilitylist()
 	double* pdprobabilitylist = new double[this->readsize()];
 	for (int i = ZERO; i < this->readsize(); i++)
 	{
-		pdprobabilitylist[i] = m_pkdata[i].readprobability();
+		pdprobabilitylist[i] = m_pkdatalist[i].readprobability();
 	}
 	return pdprobabilitylist;
 }
@@ -72,7 +72,7 @@ int kundata::initrule()
 	m_pkritem = new kruleitem[MULTIRULE];
 	for (int i = ZERO; i < MULTIRULE; i++)
 	{
-		m_pkritem[i].makerule(m_pkdata, readsize());
+		m_pkritem[i].makerule(m_pkdatalist, readsize());
 	}
 	return 1;
 }
@@ -80,7 +80,7 @@ std::ostream & operator <<(std::ostream &out,kundata &item)
 { 
 	for (int i = ZERO;i < item.readsize(); i++)
 	{
-		out << item.m_pkdata[i];
+		out << item.m_pkdatalist[i];
 	}
 	return out;
 }
