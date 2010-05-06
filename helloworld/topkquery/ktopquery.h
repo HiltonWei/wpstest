@@ -26,6 +26,8 @@ public:
 	void swap(int&,int&);
 	void qsort(int start, int end);
 	void topK(int start, int end);
+	void compression(int);
+	void subsetprovalue(int);
 	friend std::ostream & operator <<(std::ostream &,ktopquery &); 
 private:
 	int last;

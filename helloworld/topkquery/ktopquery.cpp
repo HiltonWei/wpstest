@@ -25,6 +25,12 @@ int ktopquery::init()
 		arr[i] = i;
 	}
 	topK(0, koption::s_nMaxnum-1);
+	for (int i = 0; i < koption::s_nMaxnum; i++)
+	{
+		compression(i);
+		subsetprovalue(i);
+	}
+	
 	return 1;
 }
 
@@ -81,6 +87,15 @@ void ktopquery::topK(int start, int end)
 	return ;
 }
 
+void ktopquery::compression(int i)
+{
+
+}
+
+void ktopquery::subsetprovalue(int i)
+{
+
+}
 std::ostream & operator <<(std::ostream &os,ktopquery &item)
 {
 	for(int i = 0; i < koption::s_nK; i++) 
