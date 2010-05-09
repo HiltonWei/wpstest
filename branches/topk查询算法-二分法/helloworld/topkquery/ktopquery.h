@@ -1,5 +1,26 @@
 #pragma once
 #include "kundata.h"
+#include <cstring>
+using namespace std;
+class kreorderlist
+{
+public:
+	kreorderlist(){}
+	~kreorderlist(){}
+	int readgroupcount(){return m_ngroupcount;}
+	int readitemcount(){return m_nitemcount;}
+	int* readgroup(int);
+	int putgroup(int*);
+	int movegroup(int*);	
+private:
+	static const char itemsplit = ',';
+	static const char groupsplit = ';';
+	int m_ngroupcount;
+	int m_nitemcount;
+	int m_ngroupserial;
+	int m_nitemserial;
+	CString m_strList;
+};
 class ktopquery
 {
 public:
@@ -26,7 +47,7 @@ public:
 	void swap(int&,int&);
 	void qsort(int start, int end);
 	void topK(int start, int end);
-	void compression(int);
+	int compression(int);
 	void subsetprovalue(int);
 	friend std::ostream & operator <<(std::ostream &,ktopquery &); 
 private:
