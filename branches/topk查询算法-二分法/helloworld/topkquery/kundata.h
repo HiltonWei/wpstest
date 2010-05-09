@@ -54,8 +54,8 @@ public:
 private:
 	double m_probability;
 	int m_data;
-	bool m_mark;
-	int m_ruleserial;
+	bool m_mark;//标志位
+	int m_ruleserial;//规则编号
 };
 class kundatabase
 {

@@ -1,4 +1,5 @@
 #include "ktopquery.h"
+#include <cstring>
 using namespace std;
 ktopquery* ktopquery::instance = NULL;
 ktopquery::ktopquery(void)
@@ -87,8 +88,15 @@ void ktopquery::topK(int start, int end)
 	return ;
 }
 
-void ktopquery::compression(int i)
+int ktopquery::compression(int i)
 {
+	if (i = 1)return i;
+
+	if (!m_pkitemlist[arr[i]].readmark())return -1;
+	if ()
+	{
+	}
+
 
 }
 
@@ -105,4 +113,9 @@ std::ostream & operator <<(std::ostream &os,ktopquery &item)
 	os << "Swaps:" << item.count_sw << endl;
 	os << "Campare:" << item.count_cmp << endl;
 	return os;
+}
+
+int* kreorderlist::readgroup( int i)
+{
+
 }
