@@ -193,9 +193,9 @@ int kruleitem::makerule(std::ostream &out,kdataitem* pklist,int nserial)
 		{
 			m_pnordlist[i] = rand() % (nlistsize - 1);
 		} while (pklist[m_pnordlist[i]].readmark());	
-		pklist[m_pnordlist[i]].setmark();
-		pklist[m_pnordlist[i]] = m_pdruleprolist[i];
-		(pklist[m_pnordlist[i]]).setruleserial(nserial);
+		pklist[m_pnordlist[i]].setmark();//设置标志位
+		pklist[m_pnordlist[i]] = m_pdruleprolist[i];//修改概率使其满足规则
+		(pklist[m_pnordlist[i]]).setruleserial(nserial);//设置规则序号
 		out << "  " << pklist[m_pnordlist[i]];		
 	}
 	out << "rule end\n";
