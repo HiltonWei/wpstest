@@ -11,6 +11,7 @@ class kreorderlist
 {
 public:
 	/* States */
+	friend std::ostream & operator <<(std::ostream&,kreorderlist&);
 	enum States {Removed, Empty, Added}; // states
 	kreorderlist()
 	{
@@ -19,7 +20,6 @@ public:
 	}
 	~kreorderlist(){}
 	int readgroupcount(){return m_ngroupcount;}
-	int readitemcount(){return m_nitemcount;}
 	int* readgroup(int);
 	int putgroup(int*);
 	int enterRemove(int,int);
@@ -29,22 +29,18 @@ public:
 	void putitem(int,int);
 	void changeState(States);
 	States currentState() { return m_state; }
-
-	/*Events*/
-	enum Event {Remove, Join, Add};
-
 private:
 	static const char itemsplit = ',';
 	static const char groupsplit = ' ';
 	States m_state;
 	int m_ngroupcount;//total group
-	int m_nitemcount;//total item in a group
 	int m_ngroupserial;//group serial in strlist
 	int m_nremovegroupnum;//remove item num
 	string m_groupnumlist;//group numnber
 	string m_strList;//data serial
 	string m_strremovegroup;//store the remove data
 };
+
 int* kreorderlist::readgroup(int ngroupnum)
 {
 	int* pnlist;
@@ -59,7 +55,6 @@ int* kreorderlist::readgroup(int ngroupnum)
 	stream.clear();
 	stream.str(str);
 	stream >> nlength >> c;
-	m_nitemcount = nlength;
 	pnlist = new int[nlength];
 	for (int i = 0; i < nlength; i++)
 	{
@@ -107,21 +102,29 @@ bool kreorderlist::checkgroup(int ngroupnum)
 		if (ngroupnumlist[j] == ngroupnum)
 		{
 			m_ngroupserial = j;
-			cout<<m_ngroupserial<<endl;
 			return true;
 		}
 		j++;
 	}
 	return false;
 }
+std::ostream & operator <<(std::ostream &out,kreorderlist &item)
+{
+	cout << endl <<  item.m_ngroupcount//total group
+		<<"|"<< item.m_ngroupserial//group serial in strlist
+		<<"|"<< item.m_nremovegroupnum//remove item num
+		<<"|"<< item.m_groupnumlist//group numnber
+		<<"|"<< item.m_strList//data serial
+		<<"|"<< item.m_strremovegroup;//store the remove data
+	return out;
+}
 
 int kreorderlist::enterRemove(int ngroupnum, int nserial)
 {		
-	int* pngrouplist;
 	int nlength = m_ngroupcount,
 		ngroupserial = 0, 
-		ncount = 0, 
-		nrecord = -1;
+		nrecord = -1,
+		nread = 0;
 	char c;
 	string str,groupitem;
 	stringstream buf;
@@ -134,15 +137,14 @@ int kreorderlist::enterRemove(int ngroupnum, int nserial)
 		stream.str(m_strremovegroup);
 		m_strremovegroup = "";
 		stream>>nlength>>c;
-		pngrouplist = new int[nlength];
 		buf<<(nlength + 1);
 		buf>>groupitem;
 		groupitem += itemsplit;
 		buf.clear();
 		for (int i = 0; i < nlength; i++)
 		{
-			stream>>pngrouplist[i]>>c;
-			buf<<pngrouplist[i];
+			stream>>nread>>c;
+			buf<<nread;
 			buf>>str;
 			buf.clear();
 			groupitem += str + itemsplit;
@@ -152,13 +154,6 @@ int kreorderlist::enterRemove(int ngroupnum, int nserial)
 		buf.clear();
 		groupitem += str + itemsplit;
 		m_strremovegroup = groupitem;
-		cout << endl <<  m_ngroupcount//total group
-			<<"|"<< m_nitemcount//total item in a group
-			<<"|"<< m_ngroupserial//group serial in strlist
-			<<"|"<< m_nremovegroupnum//remove item num
-			<<"|"<< m_groupnumlist//group numnber
-			<<"|"<< m_strList//data serial
-			<<"|"<< m_strremovegroup;//store the remove data
 		return 1;
 	}
 	//重组m_groupnumlist
@@ -177,6 +172,7 @@ int kreorderlist::enterRemove(int ngroupnum, int nserial)
 			nrecord = i;
 	}
 	//重组m_strList
+	stream.clear();
 	stream.str(m_strList);
 	m_strList = "";
 	for (int i = 0; i < nlength; i++)
@@ -190,17 +186,17 @@ int kreorderlist::enterRemove(int ngroupnum, int nserial)
 			str = groupitem;
 	}
 	//重组m_strremovegroup
+	stream.clear();
 	stream.str(str);
 	stream>>nlength>>c;
-	pngrouplist = new int[nlength];
 	buf<<(nlength + 1);
 	buf>>groupitem;
 	groupitem += itemsplit;
 	buf.clear();
 	for (int i = 0; i < nlength; i++)
 	{
-		stream>>pngrouplist[i]>>c;
-		buf<<pngrouplist[i];
+		stream>>ngroupserial>>c;
+		buf<<ngroupserial;
 		buf>>str;
 		buf.clear();
 		groupitem += str + itemsplit;
@@ -211,35 +207,27 @@ int kreorderlist::enterRemove(int ngroupnum, int nserial)
 	groupitem += str + itemsplit;
 	m_strremovegroup = groupitem;
 	
-	cout << endl <<  m_ngroupcount//total group
-		<<"|"<< m_nitemcount//total item in a group
-		<<"|"<< m_ngroupserial//group serial in strlist
-		<<"|"<< m_nremovegroupnum//remove item num
-		<<"|"<< m_groupnumlist//group numnber
-		<<"|"<< m_strList//data serial
-		<<"|"<< m_strremovegroup;//store the remove data
 	return 1;
 }
 
 int kreorderlist::enterAdd(int ngroupnum, int nserial)
 {
-
-	int* pngrouplist;
-	int nlength = m_ngroupcount,groupserial = -1;	
+	int nlength = m_ngroupcount,
+		groupserial = -1,
+		nread = 0;	
 	char c;
 	string str,groupitem;
 	stringstream buf;
 	istringstream stream(m_groupnumlist);
 	m_groupnumlist = "";
 	m_ngroupcount++;//组数+1
-	pngrouplist = new int[nlength];
 	//m_groupnumlist重组
 	for (int i = 0; i < nlength; i++)
 	{
-		stream >>pngrouplist[i]>>c;	
-		if (pngrouplist[i] != ngroupnum)
+		stream >>nread>>c;	
+		if (nread != ngroupnum)
 		{
-			buf<<pngrouplist[i];
+			buf<<nread;
 			buf>>str;
 			buf.clear();
 			m_groupnumlist += str + itemsplit;
@@ -296,8 +284,8 @@ int kreorderlist::enterAdd(int ngroupnum, int nserial)
 		buf.clear();
 		for (int i = 0; i < nlength; i++)
 		{
-			stream>>pngrouplist[i]>>c;
-			buf<<pngrouplist[i];
+			stream>>nread>>c;
+			buf<<nread;
 			buf>>str;
 			buf.clear();
 			groupitem += str + itemsplit;
@@ -309,13 +297,6 @@ int kreorderlist::enterAdd(int ngroupnum, int nserial)
 		m_strList += groupitem + groupsplit;
 	}
 
-	cout << endl <<  m_ngroupcount//total group
-		<<"|"<< m_nitemcount//total item in a group
-		<<"|"<< m_ngroupserial//group serial in strlist
-		<<"|"<< m_nremovegroupnum//remove item num
-		<<"|"<< m_groupnumlist//group numnber
-		<<"|"<< m_strList//data serial
-		<<"|"<< m_strremovegroup;//store the remove data
 	return 1;
 }
 
@@ -332,13 +313,6 @@ int kreorderlist::enterJoin(int ngroupnum,int nserial)
 	m_groupnumlist += str;
 	m_strremovegroup = "";
 	m_nremovegroupnum = -1;
-	cout << endl <<  m_ngroupcount//total group
-		<<"|"<< m_nitemcount//total item in a group
-		<<"|"<< m_ngroupserial//group serial in strlist
-		<<"|"<< m_nremovegroupnum//remove item num
-		<<"|"<< m_groupnumlist//group numnber
-		<<"|"<< m_strList//data serial
-		<<"|"<< m_strremovegroup;//store the remove data
 
 	return 1;
 }
@@ -369,8 +343,15 @@ void kreorderlist::putitem(int ngroupnum,int nserial)
 		else
 		{
 			enterJoin(ngroupnum, nserial);
-			enterAdd(ngroupnum, nserial);
-			changeState(Added);
+			if (checkgroup(ngroupnum))
+			{
+				enterRemove(ngroupnum, nserial);
+			}
+			else
+			{
+				enterAdd(ngroupnum, nserial);
+				changeState(Added);
+			}
 		}
 		break;
 	}
@@ -408,19 +389,18 @@ int main()
 	// 		cout<<d[i]<<" ";
 	// 	}
 	a.putitem(4, 341);
+	cout<<a;
+	a.putitem(1, 342);
+	cout<<a;
+	a.putitem(1, 342);
+	cout<<a;
+	a.putitem(1, 342);
+	cout<<a;
 	a.putitem(4, 341);
+	cout<<a;
 	a.putitem(1, 342);
-	a.putitem(1, 342);
-	a.putitem(1, 342);	
-	a.putitem(2, 342);
-	a.putitem(3, 342);
-	a.putitem(3, 342);
-	a.putitem(1, 342);
-	a.putitem(2, 342);
-	a.putitem(2, 342);
-	a.putitem(3, 342);
-	a.putitem(3, 342);
-	a.putitem(4, 341);
+	cout<<a;
+	
 	
 	system("PAUSE");
 	return 0;
