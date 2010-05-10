@@ -1,25 +1,61 @@
 #pragma once
 #include "kundata.h"
-#include <cstring>
+#include <iostream> 
+#include <string>
+#include <sstream>
 using namespace std;
 class kreorderlist
 {
 public:
-	kreorderlist(){}
-	~kreorderlist(){}
+	static kreorderlist *GetSingleton()
+	{
+		static bool inited = false;
+		if (!inited)
+		{
+			instance = new kreorderlist();
+			inited = true;
+		}
+		return instance;        
+	}
+	static void Release()
+	{
+		if (NULL != instance)
+		{
+			delete instance;
+			instance = NULL;
+		}
+	}
+	/* States */
+	enum States {Removed, Empty, Added}; // states
+	friend std::ostream & operator <<(std::ostream&,kreorderlist&);
+	
 	int readgroupcount(){return m_ngroupcount;}
-	int readitemcount(){return m_nitemcount;}
 	int* readgroup(int);
 	int putgroup(int*);
-	int movegroup(int*);	
+	int enterRemove(int,int);
+	int enterAdd(int,int);
+	int enterJoin(int, int);
+	bool checkgroup(int);
+	void putitem(int,int);
+	void changeState(States);
+	States currentState() { return m_state; }
 private:
+	static kreorderlist *instance;
+	kreorderlist()
+	{
+		m_ngroupcount = 0;
+		m_state = Empty;
+	}
+	~kreorderlist(){}
 	static const char itemsplit = ',';
-	static const char groupsplit = ';';
-	int m_ngroupcount;
-	int m_nitemcount;
-	int m_ngroupserial;
-	int m_nitemserial;
-	CString m_strList;
+	static const char groupsplit = ' ';
+	States m_state;
+	int m_ngroupcount;//total group
+	int m_ngroupserial;//group serial in strlist
+	int m_nremovegroupnum;//remove item num
+	string m_groupnumlist;//group numnber
+	string m_strList;//data serial
+	string m_strremovegroup;//store the remove data
 };
 class ktopquery
 {
