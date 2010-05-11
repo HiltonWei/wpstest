@@ -30,7 +30,7 @@ public:
 	friend std::ostream & operator <<(std::ostream&,kreorderlist&);
 	
 	int readgroupcount(){return m_ngroupcount;}
-	int* readgroup(int);
+	int readitem(int, int*&, int&);
 	int putgroup(int*);
 	int enterRemove(int,int);
 	int enterAdd(int,int);
@@ -44,14 +44,17 @@ private:
 	kreorderlist()
 	{
 		m_ngroupcount = 0;
+		m_nremovegroupnum = -1;
 		m_state = Empty;
+		m_strList = "";
+		m_groupnumlist = "";
+		m_strremovegroup = "";
 	}
 	~kreorderlist(){}
 	static const char itemsplit = ',';
 	static const char groupsplit = ' ';
 	States m_state;
 	int m_ngroupcount;//total group
-	int m_ngroupserial;//group serial in strlist
 	int m_nremovegroupnum;//remove item num
 	string m_groupnumlist;//group numnber
 	string m_strList;//data serial
@@ -80,6 +83,8 @@ public:
 	}
 	
 	int init();
+	double Pr(int);
+	double Prk(int);
 	void swap(int&,int&);
 	void qsort(int start, int end);
 	void topK(int start, int end);
@@ -88,6 +93,8 @@ public:
 	friend std::ostream & operator <<(std::ostream &,ktopquery &); 
 private:
 	int last;
+	int m_nCountPrint;
+	double m_dTotalOutPr;
 	int* arr;
 	int count_sw, count_cmp;
 	int* m_pdatalist;

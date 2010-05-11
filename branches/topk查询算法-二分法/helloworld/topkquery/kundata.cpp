@@ -12,6 +12,7 @@ int koption::s_nMultirule = MULTIRULE;
 int koption::s_nRulemax = RULEMAX;
 int koption::s_nRulemin = RULEMIN;
 int koption::s_nK = KVALUE;
+double koption::s_dP = PVALUE;
 kundata* kundata::instance = NULL;
 koption* koption::instance = NULL;
 kundata::kundata(void)

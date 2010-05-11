@@ -28,7 +28,8 @@ public:
 	static int s_nRulemax;//一个rule最大个数
 	static int s_nMaxnum;//元组的个数
 	static int s_nLimit;//保留参数
-	static int s_nK;
+	static int s_nK;//K
+	static double s_dP;//阈值
 	friend std::ostream & operator <<(std::ostream&,koption&);
 private:
 	static koption *instance;
