@@ -19,6 +19,8 @@ int ktopquery::init()
 {
 	count_sw = 0;
 	count_cmp = 0;
+	m_nCountPrint = 0;
+	m_dTotalOutPr = 0.0;
 	m_pkdata = kundata::GetSingleton();
 	m_pdatalist = m_pkdata->readdatalist();
 	m_pprolist = m_pkdata->readprobabilitylist();
@@ -27,15 +29,75 @@ int ktopquery::init()
 	for (int i = 0; i < koption::s_nMaxnum; i++)
 	{
 		arr[i] = i;
-	}
+	}//利用序号排序，元组没有真正的复制替换，只是输出的序号改变了
 	topK(0, koption::s_nMaxnum-1);
 	for (int i = 0; i < koption::s_nMaxnum; i++)
 	{
+		if (m_dTotalOutPr > koption::s_nK - koption::s_dP)
+		{
+			break;
+		}
 		compression(i);
-		subsetprovalue(i);
+		double p = Prk(i);
+		if (p >= koption::s_dP)
+		{
+			cout << m_pkitemlist[arr[i]] << endl();
+			m_nCountPrint++;
+			m_dTotalOutPr += p;
+		}
 	}
 	
 	return 1;
+}
+int ktopquery::compression(int i)
+{
+// 	if (i = 1)return i;
+// 
+// 	if (!m_pkitemlist[arr[i]].readmark())return -1;
+	kreorderlist *kcomlist = kreorderlist::GetSingleton();
+	kcomlist->putitem((m_pkitemlist[arr[i]]).readruleserial(), arr[i]);
+	return 1;
+}
+
+
+double ktopquery::Prk(int i)
+{
+	if (kreorderlist::readgroupcount() <= koption::s_nK)
+	{
+		return (m_pkitemlist[arr[i]]).readprobability();
+	}
+	kreorderlist *kcomlist = kreorderlist::GetSingleton();
+	int* pnlist;
+	int nitemlength = 0;
+	double dpri = 0.0;
+	
+}
+
+double ktopquery::Pr(int i)
+{
+	kreorderlist *kcomlist = kreorderlist::GetSingleton();
+	int* pnlist;
+	int nitemlength = 0;
+	double dpri = 0.0;
+	kcomlist->readitem(i, pnlist, nitemlength);
+	for (int i = 0; i < nitemlength; i++)
+	{
+		dpri += (m_pkitemlist[pnlist[i]]).readprobability();
+	}
+	delete []pnlist;
+	return dpri;
+}
+
+void ktopquery::subsetprovalue(int i)
+{
+	kreorderlist *kcomlist = kreorderlist::GetSingleton();
+	int nlength = kcomlist->readgroupcount();	
+	int nitemlength = 0;
+	for (int i = 0; i < nlength; i++)
+	{
+		int* pnlist;
+		kcomlist->readitem(i, pnlist, nitemlength);
+	}
 }
 
 void ktopquery::swap( int& x,int& y)
@@ -91,18 +153,7 @@ void ktopquery::topK(int start, int end)
 	return ;
 }
 
-int ktopquery::compression(int i)
-{
-	if (i = 1)return i;
 
-	if (!m_pkitemlist[arr[i]].readmark())return -1;
-
-}
-
-void ktopquery::subsetprovalue(int i)
-{
-
-}
 std::ostream & operator <<(std::ostream &os,ktopquery &item)
 {
 	for(int i = 0; i < koption::s_nK; i++) 
@@ -114,26 +165,27 @@ std::ostream & operator <<(std::ostream &os,ktopquery &item)
 	return os;
 }
 
-int* kreorderlist::readgroup(int ngroupnum)
+int kreorderlist::readitem(int groupserial, int* &pnlist, int &nlength)
 {
-	int* pnlist;
-	int nlength,groupserial;
+	nlength = m_ngroupcount;
 	char c;
 	string str;
 	istringstream stream(m_strList);
-	//check whether the group num in the forest
-	if(!checkgroup(ngroupnum))return NULL;	
-	groupserial = m_ngroupserial;
-	while(groupserial-->=0)stream>>str;
+	if (groupserial >= m_ngroupcount)return 0;
+	for (int i = 0; i < nlength; i++)
+	{
+		stream >> str;
+		if (groupserial == i)break;
+	}
 	stream.clear();
 	stream.str(str);
-	stream >> nlength >> c;
+	stream >> nlength >>c;
 	pnlist = new int[nlength];
 	for (int i = 0; i < nlength; i++)
 	{
-		stream>>pnlist[i]>>c;
+		stream >> pnlist[i] >> c;
 	}
-	return pnlist;
+	return 1;
 }
 
 int kreorderlist::putgroup( int* itemlist)
@@ -164,27 +216,28 @@ int kreorderlist::putgroup( int* itemlist)
 
 bool kreorderlist::checkgroup(int ngroupnum)
 {
+	if (ngroupnum == -1)
+	{
+		return false;
+	}
 	string str;
+	int nlength = m_ngroupcount, nserial;
 	char c;
 	istringstream stream(m_groupnumlist);
-	int* ngroupnumlist = new int[m_ngroupcount];
 	int j = 0;
-	while(!stream.eof())
+	for (int i = 0; i < nlength; i++)
 	{
-		stream>>ngroupnumlist[j]>>c;
-		if (ngroupnumlist[j] == ngroupnum)
+		stream>>nserial>>c;
+		if (nserial == ngroupnum && ngroupnum >= 0)
 		{
-			m_ngroupserial = j;
 			return true;
 		}
-		j++;
 	}
 	return false;
 }
 std::ostream & operator <<(std::ostream &out,kreorderlist &item)
 {
-	cout << endl <<  item.m_ngroupcount//total group
-		<<"|"<< item.m_ngroupserial//group serial in strlist
+	out << endl <<  item.m_ngroupcount//total group
 		<<"|"<< item.m_nremovegroupnum//remove item num
 		<<"|"<< item.m_groupnumlist//group numnber
 		<<"|"<< item.m_strList//data serial
@@ -298,7 +351,7 @@ int kreorderlist::enterAdd(int ngroupnum, int nserial)
 	for (int i = 0; i < nlength; i++)
 	{
 		stream >>nread>>c;	
-		if (nread != ngroupnum)
+		if (nread != ngroupnum || nread == -1)
 		{
 			buf<<nread;
 			buf>>str;
@@ -435,3 +488,4 @@ void kreorderlist::changeState( States state)
 {
 	m_state = state;
 }
+

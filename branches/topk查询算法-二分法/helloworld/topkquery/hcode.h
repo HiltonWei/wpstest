@@ -5,4 +5,5 @@
 #define RULEMAX 10
 #define MULTIRULE 800
 #define KVALUE 10
+#define PVALUE 0.4
 #define MYRULEFILE "myrule.txt"
