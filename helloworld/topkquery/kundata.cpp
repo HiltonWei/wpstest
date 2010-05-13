@@ -12,7 +12,7 @@ int koption::s_nMultirule = MULTIRULE;
 int koption::s_nRulemax = RULEMAX;
 int koption::s_nRulemin = RULEMIN;
 int koption::s_nK = KVALUE;
-double koption::s_dP = PVALUE;
+double koption::s_dP = THRESHOLDPVALUE;
 kundata* kundata::instance = NULL;
 koption* koption::instance = NULL;
 kundata::kundata(void)
@@ -68,12 +68,32 @@ int* kundata::readdatalist()
 	return pndatalist;
 }
 
+int* kundata::readruleseriallist()
+{
+	int* pndatalist = new int[this->readsize()];
+	for (int i = ZERO; i < this->readsize(); i++)
+	{
+		pndatalist[i] = m_pkdatalist[i].readruleserial();
+	}
+	return pndatalist;
+}
+
 double* kundata::readprobabilitylist()
 {
 	double* pdprobabilitylist = new double[this->readsize()];
 	for (int i = ZERO; i < this->readsize(); i++)
 	{
 		pdprobabilitylist[i] = m_pkdatalist[i].readprobability();
+	}
+	return pdprobabilitylist;
+}
+
+double* kundata::readruletotalprobabilitylist()
+{
+	double* pdprobabilitylist = new double[this->readsize()];
+	for (int i = ZERO; i < this->readsize(); i++)
+	{
+		pdprobabilitylist[i] = m_pkdatalist[i].readruletotalpro();
 	}
 	return pdprobabilitylist;
 }
@@ -186,8 +206,12 @@ int kruleitem::initruleitem()
 int kruleitem::makerule(std::ostream &out,kdataitem* pklist,int nserial)
 {
 	int nlistsize = koption::s_nMaxnum;
-	int nord;
 	out << nserial<<" rule begin\n";
+	double dpi = 0.0;
+	for (int i = 0; i < m_nrulecount; i++)
+	{
+		dpi += m_pdruleprolist[i];
+	}
 	for (int i = 0; i < m_nrulecount; i++)
 	{
 		do 
@@ -197,6 +221,7 @@ int kruleitem::makerule(std::ostream &out,kdataitem* pklist,int nserial)
 		pklist[m_pnordlist[i]].setmark();//设置标志位
 		pklist[m_pnordlist[i]] = m_pdruleprolist[i];//修改概率使其满足规则
 		(pklist[m_pnordlist[i]]).setruleserial(nserial);//设置规则序号
+		(pklist[m_pnordlist[i]]).setruletotalpro(dpi);
 		out << "  " << pklist[m_pnordlist[i]];		
 	}
 	out << "rule end\n";

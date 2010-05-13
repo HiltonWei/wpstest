@@ -5,6 +5,9 @@
 using namespace std;
 ktopquery* ktopquery::instance = NULL;
 kreorderlist* kreorderlist::instance = NULL;
+string kfailrule::s_strlist = "";
+int kfailrule::s_nlength = 0;
+
 ktopquery::ktopquery(void)
 {
 	init();
@@ -21,9 +24,13 @@ int ktopquery::init()
 	count_cmp = 0;
 	m_nCountPrint = 0;
 	m_dTotalOutPr = 0.0;
+	m_dMarkindependfailpro = 0.0;
+	m_strRuleFail = "";
 	m_pkdata = kundata::GetSingleton();
 	m_pdatalist = m_pkdata->readdatalist();
+	m_pruleseriallist = m_pkdata->readruleseriallist();
 	m_pprolist = m_pkdata->readprobabilitylist();
+	m_pruletotalprolist = m_pkdata->readruletotalprobabilitylist();
 	m_pkitemlist = m_pkdata->readitemlist();
 	arr = new int[koption::s_nMaxnum];
 	for (int i = 0; i < koption::s_nMaxnum; i++)
@@ -31,63 +38,132 @@ int ktopquery::init()
 		arr[i] = i;
 	}//利用序号排序，元组没有真正的复制替换，只是输出的序号改变了
 	topK(0, koption::s_nMaxnum-1);
+	cout << *this << endl;
 	for (int i = 0; i < koption::s_nMaxnum; i++)
 	{
 		if (m_dTotalOutPr > koption::s_nK - koption::s_dP)
-		{
+		{//定理5
 			break;
 		}
+		if (prune(i))continue;
 		compression(i);
 		double p = Prk(i);
 		if (p >= koption::s_dP)
 		{
-			cout << m_pkitemlist[arr[i]] << endl();
+			cout << m_pkitemlist[arr[i]] << endl;
 			m_nCountPrint++;
 			m_dTotalOutPr += p;
 		}
+		else 
+		{
+			if (m_pruleseriallist[arr[i]] == -1 
+				&& m_pprolist[arr[i]] > m_dMarkindependfailpro)
+			{//定理3
+				m_dMarkindependfailpro = m_pprolist[arr[i]];
+				delete[]reorderarr;
+				reorderarr = NULL;
+				continue;
+			}			
+			if (m_pruleseriallist[arr[i]] != -1)
+			{//定理4
+				kfailrule::putitem(m_pruleseriallist[arr[i]], m_pprolist[arr[i]]);
+				delete[]reorderarr;
+				reorderarr = NULL;
+				continue;
+			}
+
+		}
+
+		delete[]reorderarr;
+		reorderarr = NULL;
 	}
 	
 	return 1;
 }
 int ktopquery::compression(int i)
 {
-// 	if (i = 1)return i;
-// 
-// 	if (!m_pkitemlist[arr[i]].readmark())return -1;
 	kreorderlist *kcomlist = kreorderlist::GetSingleton();
-	kcomlist->putitem((m_pkitemlist[arr[i]]).readruleserial(), arr[i]);
+	kcomlist->putitem(m_pruleseriallist[arr[i]], arr[i]);
+	int nlength = kcomlist->readgroupcount();	
+	int nitemlength = 0;
+	reorderarr = new double[nlength];
+	for (int j = 0; j < nlength; j++)
+	{
+		int* pnlist;
+		reorderarr[j] = 0.0;
+		kcomlist->readitem(j, pnlist, nitemlength);
+		for (int k = 0; k < nitemlength; k++)
+		{
+			reorderarr[j] += m_pprolist[pnlist[k]];
+		}
+		delete[]pnlist;
+	}
 	return 1;
 }
 
 
 double ktopquery::Prk(int i)
 {
-	if (kreorderlist::readgroupcount() <= koption::s_nK)
-	{
-		return (m_pkitemlist[arr[i]]).readprobability();
-	}
 	kreorderlist *kcomlist = kreorderlist::GetSingleton();
-	int* pnlist;
-	int nitemlength = 0;
+	if (kcomlist->readgroupcount() <= koption::s_nK)
+	{
+		return m_pprolist[arr[i]];
+	}
 	double dpri = 0.0;
+	int nserial = kcomlist->readgroupcount() - 1;//i元素所在的重排后的位置
+	for (int j = 1; j <= koption::s_nK; j++)
+	{
+		dpri += PrSt(nserial - 1, j - 1);
+	}
+	return dpri * Pr(nserial);//乘以本身的概率
 	
 }
 
 double ktopquery::Pr(int i)
 {
-	kreorderlist *kcomlist = kreorderlist::GetSingleton();
-	int* pnlist;
-	int nitemlength = 0;
-	double dpri = 0.0;
-	kcomlist->readitem(i, pnlist, nitemlength);
-	for (int i = 0; i < nitemlength; i++)
-	{
-		dpri += (m_pkitemlist[pnlist[i]]).readprobability();
-	}
-	delete []pnlist;
-	return dpri;
+	return reorderarr[i];
 }
 
+double ktopquery::PrSt(int i,int j)
+{
+	if (i == 0 && j == 0)
+	{
+		return 1.0;
+	}
+	if (i == 0 && j != 0)
+	{
+		return 0.0;
+	}
+	if (i > 0 && j == 0)
+	{
+		double dpi = 1.0;
+		for (int k = 0; k < i - 1; k++)
+		{
+			dpi *= (1.0 - Pr(k));
+		}
+		return dpi;
+	}
+	return PrSt(i - 1, j - 1) * Pr(i-1) + PrSt(i - 1, j) * (1 - Pr(i - 1));
+}
+
+bool ktopquery::prune( int i)
+{
+	if (m_pruleseriallist[arr[i]] == -1 
+		&& m_pprolist[arr[i]] < m_dMarkindependfailpro)
+	{
+		return true;
+	}
+	if (m_pruleseriallist[arr[i]] != -1 
+		&& m_pruletotalprolist[arr[i]] < m_dMarkindependfailpro)
+	{
+		return true;
+	}
+	if (kfailrule::checkitem(m_pruleseriallist[arr[i]], m_pprolist[arr[i]]))
+	{
+		return true;
+	}
+	return false;
+}
 void ktopquery::subsetprovalue(int i)
 {
 	kreorderlist *kcomlist = kreorderlist::GetSingleton();
@@ -117,8 +193,8 @@ void ktopquery::qsort(int start, int end )
 		int j = end + 1;
 		while (true)
 		{
-			while ((m_pkitemlist[arr[++i]]).readdata() > (m_pkitemlist[mid]).readdata()) count_cmp++;
-			while ((m_pkitemlist[arr[--j]]).readdata() < (m_pkitemlist[mid]).readdata()) count_cmp++;
+			while (m_pdatalist[arr[++i]] > m_pdatalist[mid]) count_cmp++;
+			while (m_pdatalist[arr[--j]] < m_pdatalist[mid]) count_cmp++;
 			if(i>=j) break;
 			swap(arr[i], arr[j]);
 			count_sw++;
@@ -137,8 +213,8 @@ void ktopquery::topK(int start, int end)
 		int i = start - 1;
 		int j = end + 1;
 		while (true) {
-			while (m_pkitemlist[arr[++i]].readdata() > m_pkitemlist[mid].readdata()) count_cmp++;
-			while (m_pkitemlist[arr[--j]].readdata() < m_pkitemlist[mid].readdata()) count_cmp++;
+			while (m_pdatalist[arr[++i]] > m_pdatalist[mid]) count_cmp++;
+			while (m_pdatalist[arr[--j]] < m_pdatalist[mid]) count_cmp++;
 			if(i>=j) break;
 			swap(arr[i], arr[j]);
 			count_sw++;
@@ -489,3 +565,73 @@ void kreorderlist::changeState( States state)
 	m_state = state;
 }
 
+
+int kfailrule::putitem(int nserial, double dpi)
+{
+	string str;
+	stringstream buf;
+	istringstream stream(s_strlist);
+	s_strlist = "";
+	bool flag = true;
+	char c;
+	int nread;
+	double dread;
+	for (int i = 0; i < s_nlength; i++)
+	{
+		stream >> nread >> c >> dread;
+		if (nserial == nread)
+		{
+			if (dpi > dread)
+			{
+				buf << nread << itemsplit << dpi;
+				buf >> str;
+				buf.clear();
+				s_strlist += str + groupsplit;
+			}
+			else
+			{
+				buf << nread << itemsplit << dread;
+				buf >> str;
+				buf.clear();
+				s_strlist += str + groupsplit;
+			}	
+			flag = false;
+		}
+		else
+		{
+			buf << nread << itemsplit << dread;
+			buf >> str;
+			buf.clear();
+			s_strlist += str + groupsplit;
+		}		
+	}
+	if (flag)
+	{
+		buf << nserial << itemsplit << dpi;
+		buf >> str;
+		buf.clear();
+		s_strlist += str + groupsplit;
+		s_nlength++;
+	}
+	return 1;
+}
+
+bool kfailrule::checkitem(int nserial, double dpi)
+{
+	istringstream stream(s_strlist);
+	char c;
+	int nread;
+	double dread;
+	for (int i = 0; i < s_nlength; i++)
+	{
+		stream >> nread >> c >> dread;
+		if (nserial == nread)
+		{
+			if (dpi < dread)
+				return true;
+			else  
+				return false;			
+		}	
+	}
+	return false;
+}
