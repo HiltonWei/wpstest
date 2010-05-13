@@ -5,6 +5,12 @@
 #include <iostream> 
 #include <string>
 #include <sstream>
+#include <Windows.h>
+#include <CompObj.h>
+#include <Ole2.h>
+#include <ole.h>
+#include <atlbase.h>
+#include <OAIdl.h>
 using namespace std;
 typedef int Status;
 class kreorderlist
@@ -363,78 +369,10 @@ void kreorderlist::changeState( States state)
 {
 	m_state = state;
 }
+
 int main() 
 {
 	kreorderlist a;
-	int b[] = {2,4,2,4,34,15,-1};// group serial ,total num, data
-	int b1[] = {1,2,1,4,-1};
-	int b2[] = {0,2,4,2,-1};
-	int b3[] = {3,2,2,4,-1};
-	int c[1] ={0};
-	int* d;
-	// 	a.putgroup(b);
-	// 	a.putgroup(b1);
-	// 	a.putgroup(b2);
-	// 	a.putgroup(b3);
-	
-
-	// 	d = a.readgroup(2);
-	// 	if (d == NULL)
-	// 	{
-	// 		cout << "no";
-	// 	}
-
-	// 	int e = a.readitemcount();
-	// 	for(int i = 0; i < e; i++)
-	// 	{
-	// 		cout<<d[i]<<" ";
-	// 	}
-	a.putitem(4, 341);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(4, 341);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(-1, 344);
-	cout<<a;
-	a.putitem(-1, 343);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(1, 342);
-	cout<<a;
-	a.putitem(-1, 344);
-	cout<<a;
-	a.putitem(6, 330);
-	cout<<a;
-	int nlength = a.readgroupcount();
-	int gnlength = 0;
-	for (int i = 0; i < nlength; i++)
-	{
-		a.readitem(i, d, gnlength);
-		cout<<endl;
-		for (int j = 0; j < gnlength; j++)
-		{
-			cout<<d[j]<<"  ";
-		}
-		delete []d;
-		d = NULL;
-		
-	}
-	int k = 9;
-	double u = 8.69,p = 0.3;
-	if (u > k - p)
-	{
-		cout << k - p;
-	}
-	 
-	
 	system("PAUSE");
 	return 0;
 } 

@@ -20,7 +20,7 @@ int main() {
 	QueryPerformanceFrequency(&m_nFreq); // 获取时钟周期
 	QueryPerformanceCounter(&m_nBeginTime); // 获取时钟计数
 
-	cout << *(ktopquery::GetSingleton());
+	ktopquery::GetSingleton();
 	QueryPerformanceCounter(&nEndTime);
 	cout << "Run tiem : "
 		<<(nEndTime.QuadPart-m_nBeginTime.QuadPart)*1000.0/m_nFreq.QuadPart
