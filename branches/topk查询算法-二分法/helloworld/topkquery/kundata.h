@@ -41,15 +41,22 @@ private:
 class kdataitem
 {
 public:
-	kdataitem(){m_mark = false;m_ruleserial = -1;}
+	kdataitem()
+	{
+		m_mark = false;
+		m_ruleserial = -1;
+		m_ruletotalpro = 1.0;
+	}
 	~kdataitem(){}
 	friend std::ostream & operator <<(std::ostream &,kdataitem &); 
 	double readprobability(){return m_probability;}
+	double readruletotalpro(){return m_ruletotalpro;}
 	int readdata(){return m_data;}
 	void setmark(){m_mark = true;}
 	bool readmark(){return m_mark;}
 	int readruleserial(){return m_ruleserial;}
 	void setruleserial(int number){m_ruleserial = number;}
+	void setruletotalpro(double number){m_ruletotalpro = number;}
 	kdataitem& operator=(const double &dprobability){m_probability = dprobability;return *this;}
 	kdataitem& operator=(const int &ndata){m_data = ndata;return *this;}
 private:
@@ -57,6 +64,7 @@ private:
 	int m_data;
 	bool m_mark;//标志位
 	int m_ruleserial;//规则编号
+	double m_ruletotalpro;//规则的总概率
 };
 class kundatabase
 {
@@ -123,7 +131,9 @@ public:
 	int initdata();
 	int initrule();
 	int* readdatalist();
+	int* readruleseriallist();
 	double* readprobabilitylist();
+	double* readruletotalprobabilitylist();
 	friend std::ostream & operator <<(std::ostream&,kundata&);
 	kdataitem &operator[] (const size_t);
 	const kdataitem &operator[] (const size_t)const;
