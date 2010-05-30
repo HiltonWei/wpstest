@@ -45,7 +45,7 @@ int ktopquery::init()
 		{//¶¨Àí5
 			break;
 		}
-		if (prune(i))continue;
+		//if (prune(i))continue;
 		compression(i);
 		double p = Prk(i);
 		if (p >= koption::s_dP)
@@ -188,13 +188,13 @@ void ktopquery::swap( int& x,int& y)
 void ktopquery::qsort(int start, int end )
 {
 	if(start < end) {
-		int mid = arr[rand()%(end-start) + start];
+		int mid = m_pdatalist[arr[rand()%(end-start) + start]];
 		int i = start - 1;
 		int j = end + 1;
 		while (true)
 		{
-			while (m_pdatalist[arr[++i]] > m_pdatalist[mid]) count_cmp++;
-			while (m_pdatalist[arr[--j]] < m_pdatalist[mid]) count_cmp++;
+			while (m_pdatalist[arr[++i]] > mid) count_cmp++;
+			while (m_pdatalist[arr[--j]] < mid) count_cmp++;
 			if(i>=j) break;
 			swap(arr[i], arr[j]);
 			count_sw++;
@@ -209,12 +209,12 @@ void ktopquery::topK(int start, int end)
 {
 	int k = koption::s_nK;
 	if(start < end) {
-		int mid = arr[rand()%(end-start) + start];
+		int mid = m_pdatalist[arr[rand()%(end-start) + start]];
 		int i = start - 1;
 		int j = end + 1;
 		while (true) {
-			while (m_pdatalist[arr[++i]] > m_pdatalist[mid]) count_cmp++;
-			while (m_pdatalist[arr[--j]] < m_pdatalist[mid]) count_cmp++;
+			while (m_pdatalist[arr[++i]] > mid) count_cmp++;
+			while (m_pdatalist[arr[--j]] < mid) count_cmp++;
 			if(i>=j) break;
 			swap(arr[i], arr[j]);
 			count_sw++;

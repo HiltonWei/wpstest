@@ -136,7 +136,8 @@ std::ostream & operator <<(std::ostream &os,koption &item )
 	os << "Data number: " << koption::s_nMaxnum
 		<< "  Rule number: " << koption::s_nMultirule
 		<< "  Rule float: " << koption::s_nRulemin << " - " 
-		<< koption::s_nRulemax << endl; 
+		<< koption::s_nRulemax  
+		<< "  Threshold p: " << koption::s_dP <<endl; 
 	return os;
 }
 std::ostream & operator <<(std::ostream & os,kruleitem & item)
