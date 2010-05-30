@@ -22,7 +22,7 @@ int main() {
 
 	ktopquery::GetSingleton();
 	QueryPerformanceCounter(&nEndTime);
-	cout << "Run tiem : "
+	cout << "Run time : "
 		<<(nEndTime.QuadPart-m_nBeginTime.QuadPart)*1000.0/m_nFreq.QuadPart
 		<< " ms"<<endl;
 
