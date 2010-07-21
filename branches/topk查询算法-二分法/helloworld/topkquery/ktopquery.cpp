@@ -45,7 +45,7 @@ int ktopquery::init()
 		{//¶¨Àí5
 			break;
 		}
-		//if (prune(i))continue;
+		if (prune(i))continue;
 		compression(i);
 		double p = Prk(i);
 		if (p >= koption::s_dP)
