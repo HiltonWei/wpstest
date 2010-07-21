@@ -1,9 +1,9 @@
-#define MAXN 50
+#define MAXN 40
 #define LIMIT 20
 #define ZERO 0
 #define RULEMIN 0
-#define RULEMAX 0
-#define MULTIRULE 0
-#define KVALUE 25
-#define THRESHOLDPVALUE 0.2
+#define RULEMAX 2
+#define MULTIRULE 20
+#define KVALUE 20
+#define THRESHOLDPVALUE 0.5
 #define MYRULEFILE "myrule.txt"
